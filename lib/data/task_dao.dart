@@ -14,13 +14,36 @@ class TaskDao {
   static const String _difficulty = 'difficulty';
   static const String _image = 'image';
 
-  save(Task task) async {}
+  save(Task task) async {
+    print('Inside save');
+    final Database db = await getDatabase();
+    var itemExists = await find(task.nome);
+    if (itemExists.isEmpty) {
+      print('Task exists = false');
+      return await db.insert(_tablename, toMap(task));
+    } else {
+      print('Task exists = true');
+      return await db.update(_tablename, toMap(task),
+          where: '$_name = ?', whereArgs: [task.nome]);
+    }
+  }
+
   Future<List<Task>> findAll() async {
     print('Inside findAll()');
     final Database db = await getDatabase();
     final List<Map<String, dynamic>> result = await db.query(_tablename);
     print('Fetching data...found: $result');
     return fromMap(result);
+  }
+
+  Map<String, dynamic> toMap(Task task) {
+    print('Inside toMap(..)');
+    final Map<String, dynamic> map = <String, dynamic>{};
+    map[_name] = task.nome;
+    map[_image] = task.foto;
+    map[_difficulty] = task.dificuldade;
+    print('New map: $map');
+    return map;
   }
 
   List<Task> fromMap(List<Map<String, dynamic>> map) {
