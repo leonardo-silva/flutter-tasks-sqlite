@@ -67,5 +67,10 @@ class TaskDao {
     return fromMap(result);
   }
 
-  delete(String taskName) async {}
+  delete(String taskName) async {
+    print('Deleting task: $taskName');
+    final Database db = await getDatabase();
+    return await db
+        .delete(_tablename, where: '$_name = ?', whereArgs: [taskName]);
+  }
 }
