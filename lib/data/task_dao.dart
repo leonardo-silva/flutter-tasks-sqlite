@@ -6,7 +6,7 @@ class TaskDao {
   static const String tableSql = 'CREATE TABLE $_tablename('
       '$_name TEXT, '
       '$_difficulty INTEGER, '
-      '$_image TEXT, '
+      '$_image TEXT '
       ')';
 
   static const String _tablename = 'taskTable';
@@ -31,9 +31,15 @@ class TaskDao {
   Future<List<Task>> findAll() async {
     print('Inside findAll()');
     final Database db = await getDatabase();
-    final List<Map<String, dynamic>> result = await db.query(_tablename);
-    print('Fetching data...found: $result');
-    return fromMap(result);
+    print('After getDatabase()');
+    try {
+      final List<Map<String, dynamic>> result = await db.query(_tablename);
+      print('Fetching data...found: $result');
+      return fromMap(result);
+    } catch (e) {
+      print(e);
+    }
+    return [];
   }
 
   Map<String, dynamic> toMap(Task task) {

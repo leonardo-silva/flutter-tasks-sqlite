@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nosso_primeiro_projeto/components/task.dart';
+import 'package:nosso_primeiro_projeto/data/task_dao.dart';
 import 'package:nosso_primeiro_projeto/data/task_inherited.dart';
 
 class FormScreen extends StatefulWidget {
@@ -17,16 +19,16 @@ class _FormScreenState extends State<FormScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  bool valueValidator(String? value){
-     if(value != null && value.isEmpty){
-       return true;
-     }
-     return false;
+  bool valueValidator(String? value) {
+    if (value != null && value.isEmpty) {
+      return true;
+    }
+    return false;
   }
-  bool difficultyValidator(String? value){
-    if(value != null && value.isEmpty){
-      if(int.parse(value) > 5 ||
-          int.parse(value) < 1){
+
+  bool difficultyValidator(String? value) {
+    if (value != null && value.isEmpty) {
+      if (int.parse(value) > 5 || int.parse(value) < 1) {
         return true;
       }
     }
@@ -66,7 +68,7 @@ class _FormScreenState extends State<FormScreen> {
                       },
                       controller: nameController,
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Nome',
                         fillColor: Colors.white70,
@@ -86,7 +88,7 @@ class _FormScreenState extends State<FormScreen> {
                       keyboardType: TextInputType.number,
                       controller: difficultyController,
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Dificuldade',
                         fillColor: Colors.white70,
@@ -109,7 +111,7 @@ class _FormScreenState extends State<FormScreen> {
                       keyboardType: TextInputType.url,
                       controller: imageController,
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Imagem',
                         fillColor: Colors.white70,
@@ -140,13 +142,14 @@ class _FormScreenState extends State<FormScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        // print(nameController.text);
-                        // print(difficultyController.text);
-                        // print(imageController.text);
-                        TaskInherited.of(widget.taskContext).newTask(
+                        TaskDao().save(Task(
                             nameController.text,
                             imageController.text,
-                            int.parse(difficultyController.text));
+                            int.parse(difficultyController.text)));
+                        // TaskInherited.of(widget.taskContext).newTask(
+                        //     nameController.text,
+                        //     imageController.text,
+                        //     int.parse(difficultyController.text));
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Criando uma nova Tarefa'),
