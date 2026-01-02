@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:nosso_primeiro_projeto/components/difficulty.dart';
-
+import 'package:nosso_primeiro_projeto/data/task_dao.dart';
 
 class Task extends StatefulWidget {
   final String nome;
   final String foto;
   final int dificuldade;
   int nivel;
-  Task(this.nome, this.foto, this.dificuldade, [this.nivel = 0, Key? key,])
-      : super(key: key);
-
-
-
+  Task(
+    this.nome,
+    this.foto,
+    this.dificuldade, [
+    this.nivel = 0,
+    Key? key,
+  ]) : super(key: key);
 
   @override
   State<Task> createState() => _TaskState();
 }
 
 class _TaskState extends State<Task> {
-
   bool assetOrNetwork() {
     if (widget.foto.contains('http')) {
       return false;
@@ -88,8 +89,11 @@ class _TaskState extends State<Task> {
                     ),
                     SizedBox(
                       height: 52,
-                      width: 52,
+                      width: 66,
                       child: ElevatedButton(
+                          onLongPress: () {
+                            TaskDao().delete(widget.nome);
+                          },
                           onPressed: () {
                             print(widget.nivel);
                             setState(() {
@@ -104,7 +108,7 @@ class _TaskState extends State<Task> {
                               Icon(Icons.arrow_drop_up),
                               Text(
                                 'UP',
-                                style: TextStyle(fontSize: 12),
+                                style: TextStyle(fontSize: 10),
                               )
                             ],
                           )),
